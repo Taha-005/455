@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        text-align: center;
+        padding: 4rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #8b5cf6;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+        color: var(--text-muted);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .clickable-card {
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .clickable-card h3 {
+        color: #8b5cf6;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .clickable-card p {
+        color: var(--text-muted);
+    }
+
+    .special-card {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+    }
+
+    .special-card h3 {
+        color: #8b5cf6;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .special-card p {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+
+    .special-card .btn {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+    }
+
+    .special-card .btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+
+    .why-section {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(37, 99, 235, 0.1));
+    }
+
+    .why-section h2 {
+        color: var(--primary);
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .features-grid h4 {
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .features-grid p {
+        color: var(--text-muted);
+    }
+
+    /* FULL-WIDTH CHATBOT SECTION */
+    .chatbot-card {
+        margin-bottom: 3rem;
+        padding: 1.75rem 1.75rem 1.5rem 1.75rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chatbot-card h3 {
+        color: #8b5cf6;
+        margin-bottom: 0.5rem;
+        font-size: 1.7rem;
+    }
+
+    .chatbot-description {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+
+    .chat-messages {
+        height: 260px;
+        padding: 0.9rem;
+        margin-bottom: 0.9rem;
+        background: rgba(255,255,255,0.85);
+        border-radius: 10px;
+        overflow-y: auto;
+        border: 1px solid var(--border);
+        font-size: 0.95rem;
+        white-space: pre-line;
+    }
+
+    body.dark .chat-messages {
+        background: rgba(15,23,42,0.9);
+    }
+
+    .chat-message {
+        margin-bottom: 0.6rem;
+        line-height: 1.45;
+    }
+
+    .chat-message.user {
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .chat-message.bot {
+        text-align: left;
+        color: var(--text);
+    }
+
+    .chat-input-row {
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+        margin-top: 0.25rem;
+    }
+
+    .chat-input-row input {
+        flex: 1;
+        padding: 0.7rem 0.9rem;
+        border-radius: 10px;
+        border: 2px solid var(--border);
+        font-size: 0.95rem;
+        background: rgba(255,255,255,0.95);
+        color: #000;
+    }
+
+    .chat-input-row input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: #fff;
+    }
+
+    .chat-input-row button {
+        padding: 0.7rem 1.3rem;
+        border-radius: 10px;
+        border: none;
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .chat-input-row button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(37,99,235,0.35);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Numerography</h1>
+    <p>Your powerful toolkit for exploring number theory, cryptography, and advanced mathematical computations.</p>
+</div>
+
+<!-- FEATURE GRID -->
+<div class="grid-container">
+    <div class="card clickable-card" onclick="location.href='{{ url_for('factorization') }}'">
+        <h3>Prime Factorization</h3>
+        <p>Decompose any number into its prime factors with exponents. Essential for understanding number structure.</p>
+    </div>
+
+    <div class="card clickable-card" onclick="location.href='{{ url_for('euler_phi') }}'">
+        <h3>Euler's Totient</h3>
+        <p>Calculate φ(n) - the count of numbers coprime to n. Critical for RSA encryption.</p>
+    </div>
+
+    <div class="card clickable-card" onclick="location.href='{{ url_for('primality_test') }}'">
+        <h3>Primality Testing</h3>
+        <p>Miller-Rabin probabilistic test to determine if large numbers are prime or composite.</p>
+    </div>
+
+    <div class="card clickable-card" onclick="location.href='{{ url_for('modular_exponentiation') }}'">
+        <h3>Modular Exponentiation</h3>
+        <p>Efficiently compute large powers with modular arithmetic. Foundation of modern cryptography.</p>
+    </div>
+
+    <div class="card clickable-card" onclick="location.href='{{ url_for('chinese_remainder') }}'">
+        <h3>Chinese Remainder Theorem</h3>
+        <p>Solve systems of congruences or extract remainders from numbers efficiently.</p>
+    </div>
+
+    <div class="card clickable-card" onclick="location.href='{{ url_for('gcd_lcm') }}'">
+        <h3>GCD & LCM</h3>
+        <p>Find the greatest common divisor and least common multiple of two numbers.</p>
+    </div>
+
+    {% if not current_user.is_authenticated %}
+    <div class="card special-card">
+        <h3>Create Account</h3>
+        <p>Register to save your calculation history and access advanced features.</p>
+        <a href="{{ url_for('register') }}" class="btn">Get Started</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- FULL-WIDTH CHATBOT SECTION -->
+<div class="card chatbot-card">
+    <h3>Number Theory Tutor 🤖</h3>
+    <p class="chatbot-description">
+        Ask me how the app computes prime factorizations, φ(n), GCD/LCM, CRT, modular exponentiation,
+        or primality tests. I’ll walk you through the steps.
+    </p>
+
+    <div id="chatMessages" class="chat-messages">
+        <div class="chat-message bot">
+Hi! I’m the Numerography tutor.
+You can ask things like:
+• “How do you compute φ(60)?”
+• “Explain how you find the GCD.”
+• “How does the Chinese Remainder Theorem work here?”
+        </div>
+    </div>
+
+    <div class="chat-input-row">
+        <input
+            type="text"
+            id="chatInput"
+            placeholder="Type a question about number theory..."
+        >
+        <button type="button" id="chatSendBtn">Send</button>
+    </div>
+</div>
+
+<!-- WHY SECTION -->
+<div class="card why-section">
+    <h2>Why Numerography?</h2>
+    <div class="features-grid">
+        <div>
+            <h4>Lightning Fast</h4>
+            <p>Optimized algorithms handle massive numbers efficiently</p>
+        </div>
+        <div>
+            <h4>Educational</h4>
+            <p>Learn number theory through practical computation</p>
+        </div>
+        <div>
+            <h4>History Tracking</h4>
+            <p>Save and review all your calculations</p>
+        </div>
+        <div>
+            <h4>Secure</h4>
+            <p>User authentication with encrypted passwords</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.clickable-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = '0 8px 16px rgba(37, 99, 235, 0.3)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
+        });
+    });
+</script>
+
+<script>
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatMessages = document.getElementById('chatMessages');
+
+    function appendMessage(text, sender) {
+        if (!chatMessages) return;
+        const div = document.createElement('div');
+        div.classList.add('chat-message', sender);
+        div.textContent = text;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendChatMessage() {
+        if (!chatInput) return;
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        appendMessage(text, 'user');
+        chatInput.value = '';
+
+        appendMessage('Thinking...', 'bot');
+
+        try {
+            const response = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+
+            const data = await response.json();
+
+            // Remove the temporary "Thinking..." message
+            const last = chatMessages.lastElementChild;
+            if (last && last.classList.contains('bot') && last.textContent === 'Thinking...') {
+                chatMessages.removeChild(last);
+            }
+
+            if (data.success) {
+                appendMessage(data.reply, 'bot');
+            } else {
+                appendMessage(data.reply || 'Something went wrong on the server.', 'bot');
+            }
+        } catch (err) {
+            appendMessage('Error talking to the server: ' + err.message, 'bot');
+        }
+    }
+
+    if (chatSendBtn && chatInput) {
+        chatSendBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
+    }
+</script>
+{% endblock %}

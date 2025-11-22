@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Numerography - Number Theory Tools{% endblock %}</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #9b5de5;
+            --primary-dark: #7c3aed;
+            --bg: #ffffff;
+            --bg-card: rgba(255,255,255,0.8);
+            --text: #0f172a;
+            --text-muted: #334155;
+            --border: #cbd5e1;
+            --bg-image: url("/static/backgroundd.png");
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.85);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --bg-image: url("/static/backgroundd2.png");
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg) no-repeat center center fixed;
+            background-image: var(--bg-image);
+            background-size: cover;
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.4s ease, color 0.3s ease;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-dark);
+        }
+
+        .dark-toggle {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .dark-toggle:hover {
+            background: var(--primary-dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .card h2, .test-heading {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* About Us Section Styling */
+        .about-us {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem auto 4rem auto;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .about-us h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .about-us p {
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .about-us p a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .about-us p a:hover {
+            text-decoration: underline;
+        }
+
+        .about-us .copyright {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Flash messages / popup */
+        .flash-messages {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .alert {
+            background-color: var(--primary);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 250px;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: scale(0.95);
+            animation: fadeInOut 3.5s forwards;
+        }
+
+        .alert-success::before {
+            content: "😊 ";
+        }
+        .alert-error::before {
+            content: "☹️ ";
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.95); }
+            10% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.95); }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    {% if not (request.endpoint in ['login','register']) %}
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Numerography</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('factorization') }}">Factorization</a></li>
+                <li><a href="{{ url_for('euler_phi') }}">Euler Totient</a></li>
+                <li><a href="{{ url_for('primality_test') }}">Primality</a></li>
+                <li><a href="{{ url_for('modular_exponentiation') }}">Mod Exp</a></li>
+                <li><a href="{{ url_for('chinese_remainder') }}">CRT</a></li>
+                <li><a href="{{ url_for('gcd_lcm') }}">GCD/LCM</a></li>
+
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+
+                <li><button id="darkToggle" class="dark-toggle">🌙</button></li>
+            </ul>
+        </div>
+    </nav>
+    {% else %}
+    <!-- Dark/Light toggle for login/register pages -->
+    <div style="width:100%; padding: 1rem 2rem; display:flex; justify-content:flex-end;">
+        <button id="darkToggle" class="dark-toggle">🌙</button>
+    </div>
+    {% endif %}
+
+    <!-- FLASH MESSAGES -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- About Us Section -->
+    <div class="about-us">
+        <h3>About Us</h3>
+        <p><a href="https://outlook.office.com/mail/deeplink/compose?to=rrs56@mail.aub.edu" target="_blank">rrs56@mail.aub.edu</a></p>
+        <p><a href="https://outlook.office.com/mail/deeplink/compose?to=cme22@mail.aub.edu" target="_blank">cme22@mail.aub.edu</a></p>
+        <p><a href="https://outlook.office.com/mail/deeplink/compose?to=lgf03@mail.aub.edu" target="_blank">lgf03@mail.aub.edu</a></p>
+        <p><a href="https://outlook.office.com/mail/deeplink/compose?to=tmf15@mail.aub.edu" target="_blank">tmf15@mail.aub.edu</a></p>
+        <p><a href="https://outlook.office.com/mail/deeplink/compose?to=yma38@mail.aub.edu" target="_blank">yma38@mail.aub.edu</a></p>
+        <p class="copyright">&copy; 2025 Numerography</p>
+    </div>
+
+    <script>
+        // Apply saved theme on page load
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark");
+        }
+
+        // Toggle dark mode
+        const darkToggleBtns = document.querySelectorAll("#darkToggle");
+        darkToggleBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.body.classList.toggle("dark");
+                
+                const isDark = document.body.classList.contains("dark");
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
