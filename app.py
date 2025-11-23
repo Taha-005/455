@@ -4,7 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import math
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import re  # for parsing numbers in chatbot
 
@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///Numerography.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=30)
 
 # Initialize extensions
 db = SQLAlchemy(app)
@@ -230,7 +231,7 @@ def format_gcd_lcm_for_display(a, b, gcd_val, lcm_val):
 
 def format_primality_for_display(n, is_prime):
     """Format primality result as: 7 is PRIME or 33 is COMPOSITE"""
-    return f"{n} is {'PROBABLY PRIME' if is_prime else 'COMPOSITE'}"
+    return f"{n} is {'PRIME' if is_prime else 'COMPOSITE'}"
 
 def format_euler_phi_for_display(n, phi):
     """Format Euler's totient as: φ(100) = 40"""
@@ -646,7 +647,8 @@ def login():
         user = User.query.filter_by(username=username).first()
         
         if user and user.verify_password(password):
-            login_user(user)
+            remember = bool(request.form.get("remember"))
+            login_user(user, remember=remember)
             flash(f"Welcome back, {username}!", "success")
             next_page = request.args.get("next")
             return redirect(next_page if next_page else url_for("index"))
